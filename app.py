@@ -1,5 +1,9 @@
 import streamlit as st
 import random
+import streamlit as st
+
+sa_info = st.secrets["gcp_service_account"]
+
 st.set_page_config(page_title="BehEconExp", layout="centered")
 
 import csv
