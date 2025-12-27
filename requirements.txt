@@ -4,5 +4,4 @@ gspread
 google-auth
 
 git add requirements.txt
-git commit -m "Add Google Sheets dependencies"
 git push
