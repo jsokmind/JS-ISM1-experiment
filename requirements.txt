@@ -1,7 +1,2 @@
 streamlit
 pandas
-gspread
-google-auth
-
-git add requirements.txt
-git push
