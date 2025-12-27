@@ -13,28 +13,13 @@ gc = gspread.authorize(credentials)
 # Open Google Sheet by URL or name
 sheet = gc.open("beh_econ_experiment_data").sheet1
 
-
-
 st.set_page_config(page_title="BehEconExp", layout="centered")
-
-from gspread_dataframe import set_with_dataframe
-
-# Convert row into a single-row DataFrame
-df_row = pd.DataFrame([row])
-
-# Append to the sheet
-existing = pd.DataFrame(sheet.get_all_records())
-updated = pd.concat([existing, df_row], ignore_index=True)
-set_with_dataframe(sheet, updated)
-
-
 
 import csv
 import os
 from datetime import datetime, timezone
 import uuid
 
-st.session_state.participant_id = str(uuid.uuid4())
 
 def log_trial():
     """Log trial data to both CSV and Google Sheets"""
