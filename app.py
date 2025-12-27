@@ -1,10 +1,33 @@
 import streamlit as st
 import random
 import streamlit as st
+import gspread
+from google.oauth2.service_account import Credentials
+import pandas as pd
 
+# Load service account info from Streamlit secrets
 sa_info = st.secrets["gcp_service_account"]
+credentials = Credentials.from_service_account_info(sa_info)
+gc = gspread.authorize(credentials)
+
+# Open Google Sheet by URL or name
+sheet = gc.open("Your Experiment Sheet").sheet1
+
+
 
 st.set_page_config(page_title="BehEconExp", layout="centered")
+
+from gspread_dataframe import set_with_dataframe
+
+# Convert row into a single-row DataFrame
+df_row = pd.DataFrame([row])
+
+# Append to the sheet
+existing = pd.DataFrame(sheet.get_all_records())
+updated = pd.concat([existing, df_row], ignore_index=True)
+set_with_dataframe(sheet, updated)
+
+
 
 import csv
 import os
@@ -14,41 +37,41 @@ import uuid
 st.session_state.participant_id = str(uuid.uuid4())
 
 def log_trial():
+    """Log trial data to both CSV and Google Sheets"""
+    
+    # Prepare the data row
+    row_data = {
+        "participant_id": st.session_state.participant_id,
+        "block": st.session_state.block_index + 1,
+        "condition": st.session_state.condition,
+        "round": st.session_state.round,
+        "choice": st.session_state.last_choice,
+        "outcome": st.session_state.last_outcome,
+        "p_win": st.session_state.debug_p_win,
+        "win_streak": st.session_state.win_streak,
+        "loss_streak": st.session_state.loss_streak,
+        "balance": st.session_state.balance,
+        "timestamp": pd.Timestamp.now(tz="UTC").isoformat(),
+        "reaction_time_ms": st.session_state.reaction_time_ms
+    }
+    
+    # Log to CSV
     file_exists = os.path.isfile("experiment_data.csv")
-
     with open("experiment_data.csv", "a", newline="") as f:
         writer = csv.writer(f)
-
         if not file_exists:
-            writer.writerow([
-                "participant_id",
-                "block",
-                "condition",
-                "round",
-                "choice",
-                "outcome",
-                "p_win",
-                "win_streak",
-                "loss_streak",
-                "balance",
-                "timestamp"
-                "reaction_time_ms"
-            ])
-
-        writer.writerow([
-            st.session_state.participant_id,
-            st.session_state.block_index + 1,
-            st.session_state.condition,
-            st.session_state.round,
-            "safe" if st.session_state.last_outcome == "safe" else "risk",
-            st.session_state.last_outcome,
-            st.session_state.debug_p_win,
-            st.session_state.win_streak,
-            st.session_state.loss_streak,
-            st.session_state.balance,
-            datetime.now(timezone.utc).isoformat(),
-            st.session_state.reaction_time_ms
-        ])
+            writer.writerow(list(row_data.keys()))
+        writer.writerow(list(row_data.values()))
+    
+    # Log to Google Sheets
+    try:
+        from gspread_dataframe import set_with_dataframe
+        df_row = pd.DataFrame([row_data])
+        existing = pd.DataFrame(sheet.get_all_records())
+        updated = pd.concat([existing, df_row], ignore_index=True)
+        set_with_dataframe(sheet, updated)
+    except Exception as e:
+        st.error(f"Failed to log to Google Sheets: {e}")
 
 # ===== INITIALIZE ALL SESSION STATE VARIABLES =====
 if "participant_id" not in st.session_state:
@@ -292,6 +315,7 @@ def continue_after_feedback():
             st.session_state.bias_rounds_left = 3
             st.session_state.bias_rounds_active = True
 
+    log_trial()
     # Advance round
     st.session_state.round += 1
 
@@ -301,7 +325,6 @@ def continue_after_feedback():
 
     # Reset round timer for next round
     st.session_state.round_start_time = datetime.now(timezone.utc)
-    log_trial()
 
     # Enter break exactly once at round limit
     if st.session_state.round >= 15:
@@ -466,11 +489,11 @@ if (
     def _choose_safe():
         st.session_state.balance += 1
         st.session_state.awaiting_feedback = True
+        st.session_state.last_choice = "safe" 
         st.session_state.last_outcome = "safe"
-
+        
         click_time = datetime.now(timezone.utc)
         rt_ms = (click_time - st.session_state.round_start_time).total_seconds() * 1000
-
         st.session_state.reaction_time_ms = rt_ms
 
 
@@ -480,9 +503,9 @@ if (
             st.session_state.loss_streak,
             st.session_state.bias_rounds_left
         )
-
-        # store for debugging
+        
         st.session_state.debug_p_win = p_win
+        st.session_state.last_choice = "risk"
 
         # decrement bias window only if active
         if st.session_state.bias_rounds_left > 0:
@@ -571,11 +594,11 @@ if (
     def _choose_safe():
         st.session_state.balance += 1
         st.session_state.awaiting_feedback = True
+        st.session_state.last_choice = "safe"  
         st.session_state.last_outcome = "safe"
-
+        
         click_time = datetime.now(timezone.utc)
         rt_ms = (click_time - st.session_state.round_start_time).total_seconds() * 1000
-
         st.session_state.reaction_time_ms = rt_ms
 
 
@@ -585,9 +608,9 @@ if (
             st.session_state.loss_streak,
             st.session_state.bias_rounds_left
         )
-
-        # store for debugging
+        
         st.session_state.debug_p_win = p_win
+        st.session_state.last_choice = "risk"
 
         # decrement bias window only if active
         if st.session_state.bias_rounds_left > 0:
@@ -786,11 +809,11 @@ if (
     def _choose_safe():
         st.session_state.balance += 1
         st.session_state.awaiting_feedback = True
+        st.session_state.last_choice = "safe" 
         st.session_state.last_outcome = "safe"
-
+        
         click_time = datetime.now(timezone.utc)
         rt_ms = (click_time - st.session_state.round_start_time).total_seconds() * 1000
-
         st.session_state.reaction_time_ms = rt_ms
 
 
@@ -800,9 +823,9 @@ if (
             st.session_state.loss_streak,
             st.session_state.bias_rounds_left
         )
-
-        # store for debugging
+        
         st.session_state.debug_p_win = p_win
+        st.session_state.last_choice = "risk"
 
         # decrement bias window only if active
         if st.session_state.bias_rounds_left > 0:
@@ -893,11 +916,11 @@ if (
     def _choose_safe():
         st.session_state.balance += 1
         st.session_state.awaiting_feedback = True
+        st.session_state.last_choice = "safe"
         st.session_state.last_outcome = "safe"
-
+        
         click_time = datetime.now(timezone.utc)
         rt_ms = (click_time - st.session_state.round_start_time).total_seconds() * 1000
-
         st.session_state.reaction_time_ms = rt_ms
 
 
@@ -907,9 +930,9 @@ if (
             st.session_state.loss_streak,
             st.session_state.bias_rounds_left
         )
-
-        # store for debugging
+        
         st.session_state.debug_p_win = p_win
+        st.session_state.last_choice = "risk"
 
         # decrement bias window only if active
         if st.session_state.bias_rounds_left > 0:
