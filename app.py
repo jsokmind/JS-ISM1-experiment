@@ -11,7 +11,7 @@ credentials = Credentials.from_service_account_info(sa_info)
 gc = gspread.authorize(credentials)
 
 # Open Google Sheet by URL or name
-sheet = gc.open("Your Experiment Sheet").sheet1
+sheet = gc.open("beh_econ_experiment_data").sheet1
 
 
 
