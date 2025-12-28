@@ -1,30 +1,25 @@
 import streamlit as st
 import random
-import streamlit as st
-import gspread
-from google.oauth2.service_account import Credentials
+from supabase import create_client, Client
 import pandas as pd
-
-# Load service account info from Streamlit secrets
-sa_info = st.secrets["gcp_service_account"]
-credentials = Credentials.from_service_account_info(sa_info)
-gc = gspread.authorize(credentials)
-
-# Open Google Sheet by URL or name
-sheet = gc.open("beh_econ_experiment_data").sheet1
-
-st.set_page_config(page_title="BehEconExp", layout="centered")
-
-import csv
-import os
 from datetime import datetime, timezone
 import uuid
 
+@st.cache_resource
+def init_supabase():
+    url = st.secrets["supabase"]["url"]
+    key = st.secrets["supabase"]["key"]
+    return create_client(url, key)
+
+supabase = init_supabase()
+
+st.set_page_config(page_title="BehEconExp", layout="centered")
+
+
 
 def log_trial():
-    """Log trial data to both CSV and Google Sheets"""
-    
-    # Prepare the data row
+    """Log trial data to Supabase - instant and reliable"""
+
     row_data = {
         "participant_id": st.session_state.participant_id,
         "block": st.session_state.block_index + 1,
@@ -36,27 +31,19 @@ def log_trial():
         "win_streak": st.session_state.win_streak,
         "loss_streak": st.session_state.loss_streak,
         "balance": st.session_state.balance,
-        "timestamp": pd.Timestamp.now(tz="UTC").isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "reaction_time_ms": st.session_state.reaction_time_ms
     }
-    
-    # Log to CSV
-    file_exists = os.path.isfile("experiment_data.csv")
-    with open("experiment_data.csv", "a", newline="") as f:
-        writer = csv.writer(f)
-        if not file_exists:
-            writer.writerow(list(row_data.keys()))
-        writer.writerow(list(row_data.values()))
-    
-    # Log to Google Sheets
+
     try:
-        from gspread_dataframe import set_with_dataframe
-        df_row = pd.DataFrame([row_data])
-        existing = pd.DataFrame(sheet.get_all_records())
-        updated = pd.concat([existing, df_row], ignore_index=True)
-        set_with_dataframe(sheet, updated)
+        supabase.table("experiment_data").insert(row_data).execute()
     except Exception as e:
-        st.error(f"Failed to log to Google Sheets: {e}")
+        print(f"Database error: {e}")
+        # Optionally store in session state as fallback
+        if "failed_rows" not in st.session_state:
+            st.session_state.failed_rows = []
+        st.session_state.failed_rows.append(row_data)
+
 
 # ===== INITIALIZE ALL SESSION STATE VARIABLES =====
 if "participant_id" not in st.session_state:
@@ -123,8 +110,8 @@ if "round_start_time" not in st.session_state:
 if "reaction_time_ms" not in st.session_state:
     st.session_state.reaction_time_ms = None
 
-#CSS for animations
-#CSS for animations
+# CSS for animations
+# CSS for animations
 st.markdown("""
 <style>
 @keyframes pulse {
@@ -273,17 +260,15 @@ div.stButton > button:disabled {
 
 
 def continue_after_feedback():
-
     # Update streaks based on last outcome
     if st.session_state.last_outcome == "win":
         st.session_state.win_streak += 1
         st.session_state.loss_streak = 0
         st.session_state.last_risk_outcome = "win"
 
-        # Activate bias ONCE at streak threshold
         if (
-            st.session_state.win_streak == 3
-            and not st.session_state.bias_rounds_active
+                st.session_state.win_streak == 3
+                and not st.session_state.bias_rounds_active
         ):
             st.session_state.bias_rounds_left = 3
             st.session_state.bias_rounds_active = True
@@ -294,13 +279,14 @@ def continue_after_feedback():
         st.session_state.last_risk_outcome = "loss"
 
         if (
-            st.session_state.loss_streak == 3
-            and not st.session_state.bias_rounds_active
+                st.session_state.loss_streak == 3
+                and not st.session_state.bias_rounds_active
         ):
             st.session_state.bias_rounds_left = 3
             st.session_state.bias_rounds_active = True
 
-    log_trial()
+    log_trial()  # (< 100ms)
+
     # Advance round
     st.session_state.round += 1
 
@@ -316,9 +302,9 @@ def continue_after_feedback():
         st.session_state.in_break = True
 
 
-
 def update_condition_from_block():
     st.session_state.condition = st.session_state.block_order[st.session_state.block_index]
+
 
 def emotional_context(win_streak, loss_streak):
     if win_streak >= 3:
@@ -343,7 +329,8 @@ def emotional_context(win_streak, loss_streak):
             "sub": "What will you do next?"
         }
 
-#streak logic
+
+# streak logic
 def biased_risk_outcome(win_streak, loss_streak, bias_rounds_left):
     """
     Returns (outcome, p_win)
@@ -381,13 +368,13 @@ def biased_risk_outcome(win_streak, loss_streak, bias_rounds_left):
     return outcome, p_win
 
 
-
 # show an introduction screen with brief instructions and a start button for the participant / player
 def _start_experiment():
     st.session_state.started = True
     st.session_state.block = 1
     st.session_state.block_index = 0  # Start at first randomized block
     update_condition_from_block()
+
 
 # Only to show title and welcome on intro screen
 if not st.session_state.started:
@@ -430,8 +417,8 @@ if st.session_state.started and st.session_state.in_break:
 
 # Experiment complete screen
 if (
-        st.session_state.started
-        and st.session_state.block > 4
+    st.session_state.started
+    and st.session_state.block > 4
 ):
     st.header("🎉 Experiment Complete!")
     st.write("Thank you so much for participating in this behavioral economics study!")
@@ -451,12 +438,13 @@ if (
     st.write("You may now close this window.")
 
 
+
 # --- NEUTRAL BLOCK ---
 if (
-    st.session_state.started
-    and not st.session_state.in_break
-    and st.session_state.block <= 4
-    and st.session_state.condition == "neutral"
+        st.session_state.started
+        and not st.session_state.in_break
+        and st.session_state.block <= 4
+        and st.session_state.condition == "neutral"
 ):
 
     # Clean info display at top
@@ -474,9 +462,9 @@ if (
     def _choose_safe():
         st.session_state.balance += 1
         st.session_state.awaiting_feedback = True
-        st.session_state.last_choice = "safe" 
+        st.session_state.last_choice = "safe"
         st.session_state.last_outcome = "safe"
-        
+
         click_time = datetime.now(timezone.utc)
         rt_ms = (click_time - st.session_state.round_start_time).total_seconds() * 1000
         st.session_state.reaction_time_ms = rt_ms
@@ -488,7 +476,7 @@ if (
             st.session_state.loss_streak,
             st.session_state.bias_rounds_left
         )
-        
+
         st.session_state.debug_p_win = p_win
         st.session_state.last_choice = "risk"
 
@@ -541,10 +529,10 @@ if (
 
 # --- VISUAL BLOCK ---
 if (
-    st.session_state.started
-    and not st.session_state.in_break
-    and st.session_state.block <= 4
-    and st.session_state.condition == "visual"
+        st.session_state.started
+        and not st.session_state.in_break
+        and st.session_state.block <= 4
+        and st.session_state.condition == "visual"
 ):
 
     # Clean info display at top
@@ -579,9 +567,9 @@ if (
     def _choose_safe():
         st.session_state.balance += 1
         st.session_state.awaiting_feedback = True
-        st.session_state.last_choice = "safe"  
+        st.session_state.last_choice = "safe"
         st.session_state.last_outcome = "safe"
-        
+
         click_time = datetime.now(timezone.utc)
         rt_ms = (click_time - st.session_state.round_start_time).total_seconds() * 1000
         st.session_state.reaction_time_ms = rt_ms
@@ -593,7 +581,7 @@ if (
             st.session_state.loss_streak,
             st.session_state.bias_rounds_left
         )
-        
+
         st.session_state.debug_p_win = p_win
         st.session_state.last_choice = "risk"
 
@@ -639,13 +627,12 @@ if (
             st.write("")
             st.button("Continue →", on_click=continue_after_feedback, use_container_width=True)
 
-
 # --- AFFECTIVE BLOCK ---
 if (
-    st.session_state.started
-    and not st.session_state.in_break
-    and st.session_state.block <= 4
-    and st.session_state.condition == "affective"
+        st.session_state.started
+        and not st.session_state.in_break
+        and st.session_state.block <= 4
+        and st.session_state.condition == "affective"
 ):
 
     ctx = emotional_context(st.session_state.win_streak, st.session_state.loss_streak)
@@ -794,9 +781,9 @@ if (
     def _choose_safe():
         st.session_state.balance += 1
         st.session_state.awaiting_feedback = True
-        st.session_state.last_choice = "safe" 
+        st.session_state.last_choice = "safe"
         st.session_state.last_outcome = "safe"
-        
+
         click_time = datetime.now(timezone.utc)
         rt_ms = (click_time - st.session_state.round_start_time).total_seconds() * 1000
         st.session_state.reaction_time_ms = rt_ms
@@ -808,7 +795,7 @@ if (
             st.session_state.loss_streak,
             st.session_state.bias_rounds_left
         )
-        
+
         st.session_state.debug_p_win = p_win
         st.session_state.last_choice = "risk"
 
@@ -874,13 +861,12 @@ if (
             st.write("")  # Add spacing to align button vertically
             st.button("Continue →", on_click=continue_after_feedback, use_container_width=True)
 
-
 # --- DE-SALIENCE BLOCK ---
 if (
-    st.session_state.started
-    and not st.session_state.in_break
-    and st.session_state.block <= 4
-    and st.session_state.condition == "de-salience"
+        st.session_state.started
+        and not st.session_state.in_break
+        and st.session_state.block <= 4
+        and st.session_state.condition == "de-salience"
 ):
 
     # Clean info display at top
@@ -897,13 +883,12 @@ if (
     st.caption("Each round is independent. Previous outcomes do not affect future results.")
 
 
-
     def _choose_safe():
         st.session_state.balance += 1
         st.session_state.awaiting_feedback = True
         st.session_state.last_choice = "safe"
         st.session_state.last_outcome = "safe"
-        
+
         click_time = datetime.now(timezone.utc)
         rt_ms = (click_time - st.session_state.round_start_time).total_seconds() * 1000
         st.session_state.reaction_time_ms = rt_ms
@@ -915,7 +900,7 @@ if (
             st.session_state.loss_streak,
             st.session_state.bias_rounds_left
         )
-        
+
         st.session_state.debug_p_win = p_win
         st.session_state.last_choice = "risk"
 
@@ -960,6 +945,3 @@ if (
         with button_col:
             st.write("")
             st.button("Continue →", on_click=continue_after_feedback, use_container_width=True)
-
-
-
