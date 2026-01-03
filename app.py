@@ -16,7 +16,6 @@ supabase = init_supabase()
 st.set_page_config(page_title="BehEconExp", layout="centered")
 
 
-
 def log_trial():
     """Log trial data to Supabase - instant and reliable"""
 
