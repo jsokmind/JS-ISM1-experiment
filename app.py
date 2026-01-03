@@ -389,12 +389,18 @@ def continue_after_feedback():
     st.session_state.awaiting_feedback = False
     st.session_state.last_outcome = None
 
+    # Clearing animation flag for next round 
+    if "animation_shown" in st.session_state:
+        del st.session_state.animation_shown
+
     # Reset round timer for next round
     st.session_state.round_start_time = datetime.now(timezone.utc)
 
     # Enter break exactly once at round limit
     if st.session_state.round >= 15:
         st.session_state.in_break = True
+
+
 
 
 def update_condition_from_block():
@@ -599,7 +605,7 @@ if (
     with col2:
         st.metric("Round", f"{st.session_state.round + 1}/15")
     with col3:
-        if st.session_state.awaiting_feedback and st.session_state.last_outcome:
+        if (st.session_state.awaiting_feedback and st.session_state.last_outcome and "animation_shown" not in st.session_state):
             # Determine amount changed
             if st.session_state.last_outcome == "safe":
                 amount = 1
@@ -615,6 +621,7 @@ if (
             st.markdown(
                 f"<div style='font-size: 14px; color: #666; margin-bottom: 4px;'>Balance</div><div style='font-size: 28px; font-weight: 700;'>${st.session_state.balance} {animation}</div>",
                 unsafe_allow_html=True)
+            st.session_state.animation_shown = True
         else:
             st.metric("Balance", st.session_state.balance)
 
@@ -704,7 +711,7 @@ if (
     with col2:
         st.metric("Round", f"{st.session_state.round + 1}/15")
     with col3:
-        if st.session_state.awaiting_feedback and st.session_state.last_outcome:
+        if (st.session_state.awaiting_feedback and st.session_state.last_outcome and "animation_shown" not in st.session_state):
             # Determine amount changed
             if st.session_state.last_outcome == "safe":
                 amount = 1
@@ -720,6 +727,7 @@ if (
             st.markdown(
                 f"<div style='font-size: 14px; color: #665; margin-bottom: 4px;'>Balance</div><div style='font-size: 28px; font-weight: 700;'>${st.session_state.balance} {animation}</div>",
                 unsafe_allow_html=True)
+            st.session_state.animation_shown = True
         else:
             st.metric("Balance", st.session_state.balance)
 
@@ -823,7 +831,9 @@ if (
     with col2:
         st.metric("Round", f"{st.session_state.round + 1}/15")
     with col3:
-        if st.session_state.awaiting_feedback and st.session_state.last_outcome:
+        if (st.session_state.awaiting_feedback and 
+        st.session_state.last_outcome and 
+        "animation_shown" not in st.session_state):
             # Determine amount changed
             if st.session_state.last_outcome == "safe":
                 amount = 1
@@ -839,6 +849,7 @@ if (
             st.markdown(
                 f"<div style='font-size: 14px; color: #666; margin-bottom: 4px;'>Balance</div><div style='font-size: 28px; font-weight: 700;'>${st.session_state.balance} {animation}</div>",
                 unsafe_allow_html=True)
+            st.session_state.animation_shown = True
         else:
             st.metric("Balance", st.session_state.balance)
 
@@ -1072,7 +1083,9 @@ if (
     with col2:
         st.metric("Round", f"{st.session_state.round + 1}/15")
     with col3:
-        if st.session_state.awaiting_feedback and st.session_state.last_outcome:
+        if (st.session_state.awaiting_feedback and
+            st.session_state.last_outcome and
+            "animation_shown" not in st.session_state):
             # Determine amount changed
             if st.session_state.last_outcome == "safe":
                 amount = 1
@@ -1088,6 +1101,8 @@ if (
             st.markdown(
                 f"<div style='font-size: 14px; color: #666; margin-bottom: 4px;'>Balance</div><div style='font-size: 28px; font-weight: 700;'>${st.session_state.balance} {animation}</div>",
                 unsafe_allow_html=True)
+            st.session_state.animation_shown = True
+
         else:
             st.metric("Balance", st.session_state.balance)
 
