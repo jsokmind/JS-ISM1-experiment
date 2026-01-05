@@ -354,6 +354,10 @@ div.stButton > button:disabled {
 
 
 def continue_after_feedback():
+    # Clear animation flag FIRST before any other updates
+    if "animation_shown" in st.session_state:
+        del st.session_state.animation_shown
+    
     # Update streaks based on last outcome
     if st.session_state.last_outcome == "win":
         st.session_state.win_streak += 1
@@ -388,18 +392,12 @@ def continue_after_feedback():
     st.session_state.awaiting_feedback = False
     st.session_state.last_outcome = None
 
-    # Clearing animation flag for next round 
-    if "animation_shown" in st.session_state:
-        del st.session_state.animation_shown
-
     # Reset round timer for next round
     st.session_state.round_start_time = datetime.now(timezone.utc)
 
     # Enter break exactly once at round limit
     if st.session_state.round >= 15:
         st.session_state.in_break = True
-
-
 
 
 def update_condition_from_block():
