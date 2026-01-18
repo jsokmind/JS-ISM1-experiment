@@ -594,13 +594,22 @@ def _start_experiment():
 
 # Only to show title and welcome on intro screen
 if not st.session_state.started:
-    st.title("Behavioral Econ Experiment")
-    st.header("Welcome!")
+    st.title("The Market's Pulse")
+    st.header("Welcome")
     st.write(
-        "Today, you will be playing the latest and greatest online betting game.\n\n"
-        "Your objective is to maximize your earnings. There will be blocks of rounds, each separated by a brief break.\n\n"
-        "Each round is an individual decision between a safe-option (+1) and a risk-bet (+4 if win, -2 if loss) whose outcomes are determined by a computerized random process. \n\n"
-        "Thus, you may notice streaks."
+    "In this game, you will be making a series of decisions in a simulated betting environment. "
+    "Your goal is to maximize your earnings over the course of the game.\n\n"
+
+    "In each round, you will choose between:\n"
+    "- A **safe bet** that guarantees +1"
+    "- A **risky bet** that can result in a gain (+4) or a loss (-2) \n\n"
+
+    "Outcomes of the risky option are determined by a computerized random process. "
+    "As the game progresses, you may observe patterns or streaks in outcomes.\n\n"
+
+    "**To be eligible for the free but random $50 participation prize, you must complete all rounds of the game** "
+    "and submit the short form that will appear at the end of the experiment.\n\n"
+    "Good luck!" 
     )
     st.write(f"Starting balance: {st.session_state.balance}")
     st.button("Start Experiment", on_click=_start_experiment)
