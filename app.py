@@ -1275,7 +1275,7 @@ if (
 
     st.divider()
 
-    st.caption("Each round is independent. Previous outcomes do not affect future results.")
+    st.caption("Each block is independent. Previous outcomes do not affect future results.")
 
 
     def _choose_safe():
