@@ -585,14 +585,14 @@ if st.session_state.started and st.session_state.in_break:
     st.warning("""
     ⚠️ **New Block Starting**
     
-    **You will notice that many things will change so...**
+    **Each block is independent. Your balance has been reset to $20.**
     - Do not rely on strategies from the previous block
     - Pay close attention to how information is presented in this block
     - Make decisions based on what you observe here
     
-    **Your task:** Make the best choices you can based on the information presented in THIS block.
+    **Make decisions based only on what you observe in this next block.**
 
-    Previous blocks do not predict what will happen in this one.
+    Previous outcomes do not predict future results.
     """)
     
     st.divider()
