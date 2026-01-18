@@ -52,9 +52,9 @@ VISUAL_MESSAGES = {
         "You played it safe. +1 earned."
     ],
     "win": [
-        "You chose the risky option and won. +2 added.",
-        "Your risky bet paid off. +2 to your balance.",
-        "You took the risk and won. +2 earned."
+        "You chose the risky option and won. +4 added.",
+        "Your risky bet paid off. +4 to your balance.",
+        "You took the risk and won. +4 earned."
     ],
     "loss": [
         "You chose the risky option and lost. -2 deducted.",
@@ -70,14 +70,14 @@ AFFECTIVE_MESSAGES = {
         "✓ Safe and sound. +1 to your balance."
     ],
     "win_neutral": [  # For streaks 0-2
-        "🎉 Nice hit! +2 added.",
-        "✨ You won the risky bet! +2 earned.",
-        "💵 Risky choice paid off! +2 to your balance."
+        "🎉 Nice hit! +4 added.",
+        "✨ You won the risky bet! +4 earned.",
+        "💵 Risky choice paid off! +4 to your balance."
     ],
     "win_hot": [  # For streaks 3+
         "🚀 Another win! The streak keeps rolling!",
-        "🔥 You're unstoppable! +2 added to the fire!",
-        "⚡ The momentum continues! +2 and counting!"
+        "🔥 You're unstoppable! +4 added to the fire!",
+        "⚡ The momentum continues! +4 and counting!"
     ],
     "loss_neutral": [  # For streaks 0-2
         "😬 Tough loss. -2 deducted.",
@@ -599,7 +599,7 @@ if not st.session_state.started:
     st.write(
         "Today, you will be playing the latest and greatest online betting game.\n\n"
         "Your objective is to maximize your earnings. There will be blocks of rounds, each separated by a brief break.\n\n"
-        "Each round is an individual decision between a safe-option and a risk-bet whose outcomes (win / loss) are determined by a computerized random process. \n\n"
+        "Each round is an individual decision between a safe-option (+1) and a risk-bet (+$4 if win, -$2 if loss) whose outcomes are determined by a computerized random process. \n\n"
         "Thus, you may notice streaks."
     )
     st.write(f"Starting balance: {st.session_state.balance}")
@@ -802,7 +802,10 @@ if (
             if st.session_state.bias_rounds_left == 0:
                 st.session_state.bias_rounds_active = False
 
-        st.session_state.balance += outcome * 2
+        if outcome == 1: 
+            st.session_state.balance += 4 # Win 
+        else: 
+            st.session_state.balance -= 2 # Loss 
         st.session_state.awaiting_feedback = True
         st.session_state.last_outcome = "win" if outcome == 1 else "loss"
 
@@ -818,7 +821,7 @@ if (
         st.button("Safe Option\n+1", on_click=_choose_safe, disabled=st.session_state.awaiting_feedback,
                   use_container_width=True)
     with col2:
-        st.button("Risky Option\n±2", on_click=_choose_risk, disabled=st.session_state.awaiting_feedback,
+        st.button("Risky Option\n+4 / -2", on_click=_choose_risk, disabled=st.session_state.awaiting_feedback,
                   use_container_width=True)
 
     # awaiting feedback from the player
@@ -925,7 +928,10 @@ if (
             if st.session_state.bias_rounds_left == 0:
                 st.session_state.bias_rounds_active = False
 
-        st.session_state.balance += outcome * 2
+        if outcome == 1: 
+            st.session_state.balance += 4 # Win 
+        else: 
+            st.session_state.balance -= 2 # Loss 
         st.session_state.awaiting_feedback = True
         st.session_state.last_outcome = "win" if outcome == 1 else "loss"
 
@@ -940,7 +946,7 @@ if (
         st.button("Safe Option\n+1", on_click=_choose_safe, disabled=st.session_state.awaiting_feedback,
                   use_container_width=True)
     with col2:
-        st.button("Risky Option\n±2", on_click=_choose_risk, disabled=st.session_state.awaiting_feedback,
+        st.button("Risky Option\n+4 / -2", on_click=_choose_risk, disabled=st.session_state.awaiting_feedback,
                   use_container_width=True)
 
     if st.session_state.awaiting_feedback:
@@ -1162,7 +1168,10 @@ if (
             if st.session_state.bias_rounds_left == 0:
                 st.session_state.bias_rounds_active = False
 
-        st.session_state.balance += outcome * 2
+        if outcome == 1: 
+            st.session_state.balance += 4 # Win 
+        else: 
+            st.session_state.balance -= 2 # Loss 
         st.session_state.awaiting_feedback = True
         st.session_state.last_outcome = "win" if outcome == 1 else "loss"
 
@@ -1290,7 +1299,10 @@ if (
             if st.session_state.bias_rounds_left == 0:
                 st.session_state.bias_rounds_active = False
 
-        st.session_state.balance += outcome * 2
+        if outcome == 1: 
+            st.session_state.balance += 4 # Win 
+        else: 
+            st.session_state.balance -= 2 # Loss 
         st.session_state.awaiting_feedback = True
         st.session_state.last_outcome = "win" if outcome == 1 else "loss"
 
@@ -1305,7 +1317,7 @@ if (
         st.button("Safe Option\n+1", on_click=_choose_safe, disabled=st.session_state.awaiting_feedback,
                   use_container_width=True)
     with col2:
-        st.button("Risky Option\n±2", on_click=_choose_risk, disabled=st.session_state.awaiting_feedback,
+        st.button("Risky Option\n+4 / -2", on_click=_choose_risk, disabled=st.session_state.awaiting_feedback,
                   use_container_width=True)
 
     if st.session_state.awaiting_feedback:
