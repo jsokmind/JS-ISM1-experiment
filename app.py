@@ -608,7 +608,7 @@ if not st.session_state.started:
     unsafe_allow_html=True
     )
 
-    st.title("The Market’s Pulse")
+    st.title("The Market's Pulse")
     st.header("Welcome")
     st.write(
     "In this game, you will be making a series of decisions in a simulated betting environment. "
