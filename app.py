@@ -398,6 +398,10 @@ def continue_after_feedback():
     # Enter break exactly once at round limit
     if st.session_state.round >= 30:
         st.session_state.in_break = True
+        # Clear all feedback state when entering break 
+        st.session_state.awaiting_feedback = False 
+        st.session_state.last_outcome = None 
+        st.session_state.last_choice = None 
 
 
 def update_condition_from_block():
@@ -552,9 +556,14 @@ if st.session_state.started and st.session_state.in_break:
     elapsed = (datetime.now(timezone.utc) - st.session_state.break_start_time).total_seconds()
     remaining = max(0, 20 - int(elapsed))
     
+    # Clear any previous content
+    st.empty()
+    
     st.header("Break Time!")
     st.write("Please take a short break before continuing to the next block.")
     st.write("The next block will begin automatically when the timer reaches zero.")
+    
+    st.divider()
     
     # Mindless task: Moving countdown
     if remaining > 0:
@@ -596,7 +605,9 @@ if st.session_state.started and st.session_state.in_break:
         # Break is over - show continue button
         st.success("✅ Break complete! You may now continue.")
         
-        if st.button("Continue to Next Block", type="primary"):
+        st.write("")  # Add spacing
+        
+        if st.button("Continue to Next Block", use_container_width=True):
             st.session_state.block += 1
             st.session_state.block_index += 1
             st.session_state.round = 0
