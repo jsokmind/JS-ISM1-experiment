@@ -826,10 +826,10 @@ if (
     # Larger buttons side by side
     col1, col2 = st.columns(2, gap="large")
     with col1:
-        st.button("Safe Option\n+1", on_click=_choose_safe, disabled=st.session_state.awaiting_feedback,
+        st.button("Safe Option\n\(+1)", on_click=_choose_safe, disabled=st.session_state.awaiting_feedback,
                   use_container_width=True)
     with col2:
-        st.button("Risky Option\n+4 / -2", on_click=_choose_risk, disabled=st.session_state.awaiting_feedback,
+        st.button("Risky Option\n(+4 / -2)", on_click=_choose_risk, disabled=st.session_state.awaiting_feedback,
                   use_container_width=True)
 
     # awaiting feedback from the player
@@ -951,10 +951,10 @@ if (
 
     col1, col2 = st.columns(2, gap="large")
     with col1:
-        st.button("Safe Option\n+1", on_click=_choose_safe, disabled=st.session_state.awaiting_feedback,
+        st.button("Safe Option\n(+1)", on_click=_choose_safe, disabled=st.session_state.awaiting_feedback,
                   use_container_width=True)
     with col2:
-        st.button("Risky Option\n+4 / -2", on_click=_choose_risk, disabled=st.session_state.awaiting_feedback,
+        st.button("Risky Option\n(+4 / -2)", on_click=_choose_risk, disabled=st.session_state.awaiting_feedback,
                   use_container_width=True)
 
     if st.session_state.awaiting_feedback:
@@ -1322,10 +1322,10 @@ if (
 
     col1, col2 = st.columns(2, gap="large")
     with col1:
-        st.button("Safe Option\n+1", on_click=_choose_safe, disabled=st.session_state.awaiting_feedback,
+        st.button("Safe Option\n(+1)", on_click=_choose_safe, disabled=st.session_state.awaiting_feedback,
                   use_container_width=True)
     with col2:
-        st.button("Risky Option\n+4 / -2", on_click=_choose_risk, disabled=st.session_state.awaiting_feedback,
+        st.button("Risky Option\n(+4 / -2)", on_click=_choose_risk, disabled=st.session_state.awaiting_feedback,
                   use_container_width=True)
 
     if st.session_state.awaiting_feedback:
