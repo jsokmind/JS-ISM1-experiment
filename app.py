@@ -536,14 +536,67 @@ if not st.session_state.started:
     )
     st.write(f"Starting balance: {st.session_state.balance}")
     st.button("Start Experiment", on_click=_start_experiment)
+# Initializing break timer if not existing 
+if "break_start_time" not in st.session_state: 
+    st.session_state.break_start_time = None 
 
 # Main experiment logic
 if st.session_state.started and st.session_state.in_break:
+
+    # Start the break timer on first entry 
+    if st.session_state.break_start_time is None: 
+        st.session_state.break_start_time = datetime.now(timezone.utc)
+
+    # To calculate elapsed time 
+    elapsed = (datetime.now(timezone.utc) - st.session_state.break_start_time).total_seconds()
+    remaining = max(0, 20 - int(elapsed)) 
+    
     st.header("Break Time!")
     st.write("Please take a short break before continuing to the next block.")
-    st.write("When you are ready, click the button below to proceed.")
+    st.write("The next block will begin when the timer reaches zero.")
 
-    if st.button("Continue to Next Block"):
+    # Mindless stimulative task: Moving countdown 
+    if remaining > 0: 
+        # Generate pseudo-random but stable enough position based on remaining time 
+        # Ensures position changes each second but stays stable between reruns 
+        import hashlib
+        position_seed = int(hashlib.md5(f"{remaining}".encode()).hexdigest(), 16)
+
+        # Random position (~0-80% of the width to keep it visible) 
+    left_position = (position_seed % 80)
+    top_position = ((position_seed // 100) % 60) + 20  # 20-80% of height
+
+    countdown_html = f"""
+        <div style="
+            position: fixed;
+            left: {left_position}%;
+            top: {top_position}%;
+            font-size: 48px;
+            font-weight: 700;
+            color: #4CAF50;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        ">
+            Break over in {remaining}
+        </div>
+        """
+        st.markdown(countdown_html, unsafe_allow_html=True)
+        
+        # Auto-refresh every second
+        import time
+        time.sleep(1)
+        st.rerun()
+    
+    else:
+        # Break is over - show continue button
+        st.success("✅ Break complete! You may now continue.")
+
+
+    if st.button("Continue to Next Block", type="primary"):
         st.session_state.block += 1
         st.session_state.block_index += 1
         st.session_state.round = 0
