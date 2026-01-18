@@ -594,20 +594,6 @@ def _start_experiment():
 
 # Only to show title and welcome on intro screen
 if not st.session_state.started:
-    st.markdown(
-    """
-    <style>
-    h1 {
-        font-family: "Helvetica Neue", Arial, sans-serif;
-        color: #243b5a;
-        font-weight: 400;
-        letter-spacing: 0.6px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-    )
-
     st.title("The Market's Pulse")
     st.header("Welcome")
     st.write(
