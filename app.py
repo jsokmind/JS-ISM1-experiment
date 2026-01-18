@@ -594,14 +594,28 @@ def _start_experiment():
 
 # Only to show title and welcome on intro screen
 if not st.session_state.started:
-    st.title("The Market's Pulse")
+    st.markdown(
+    """
+    <style>
+    h1 {
+        font-family: "Georgia", "Times New Roman", serif;
+        color: #1f3a5f;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+    )
+
+    st.title("The Market’s Pulse")
     st.header("Welcome")
     st.write(
     "In this game, you will be making a series of decisions in a simulated betting environment. "
     "Your goal is to maximize your earnings over the course of the game.\n\n"
 
     "In each round, you will choose between:\n"
-    "- A **safe bet** that guarantees +1"
+    "- A **safe bet** that guarantees +1 \n"
     "- A **risky bet** that can result in a gain (+4) or a loss (-2) \n\n"
 
     "Outcomes of the risky option are determined by a computerized random process. "
