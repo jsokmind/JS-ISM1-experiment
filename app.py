@@ -20,7 +20,8 @@ def log_trial():
     """Log trial data to Supabase - instant and reliable"""
 
     row_data = {
-        "participant_id": st.session_state.participant_id,
+        "participant_id": st.session_state.participant_id, 
+        "order_name": st.session_state.order_name, # For block order names 
         "block": st.session_state.block_index + 1,
         "condition": st.session_state.condition,
         "round": st.session_state.round,
@@ -49,10 +50,26 @@ if "participant_id" not in st.session_state:
     st.session_state.participant_id = str(uuid.uuid4())
 
 if "block_order" not in st.session_state:
-    st.session_state.block_order = random.sample(
-        ["neutral", "visual", "affective", "de-salience"],
-        4
-    )
+    # Fixed block orders for counterbalancing (25% chance each) 
+    possible_orders = [
+        ["neutral", "visual", "affective", "de-salience"],      # Order 1 (NVAD)
+        ["visual", "de-salience", "neutral", "affective"],      # Order 2 (VDNA)
+        ["affective", "neutral", "de-salience", "visual"],      # Order 3 (ANDV)
+        ["de-salience", "affective", "visual", "neutral"]       # Order 4 (DAVN)
+    ]
+
+    # Randomly assign one of the four orders
+    st.session_state.block_order = random.choice(possible_orders)
+    
+    # Store order name for easy analysis
+    order_names = {
+        "neutral-visual-affective-de-salience": "Order1_NVAD",
+        "visual-de-salience-neutral-affective": "Order2_VDNA",
+        "affective-neutral-de-salience-visual": "Order3_ANDV",
+        "de-salience-affective-visual-neutral": "Order4_DAVN"
+    }
+    order_key = "-".join(st.session_state.block_order)
+    st.session_state.order_name = order_names.get(order_key, "Unknown")
 
 # Initialize session state variables
 if "block_index" not in st.session_state:
