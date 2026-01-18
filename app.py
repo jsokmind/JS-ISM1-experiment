@@ -757,7 +757,7 @@ if (
                 amount = 1
                 outcome_type = "safe"
             elif st.session_state.last_outcome == "win":
-                amount = 2
+                amount = 4
                 outcome_type = "win"
             else:
                 amount = -2
@@ -866,7 +866,7 @@ if (
                 amount = 1
                 outcome_type = "safe"
             elif st.session_state.last_outcome == "win":
-                amount = 2
+                amount = 4
                 outcome_type = "win"
             else:
                 amount = -2
@@ -994,7 +994,7 @@ if (
                 amount = 1
                 outcome_type = "safe"
             elif st.session_state.last_outcome == "win":
-                amount = 2
+                amount = 4
                 outcome_type = "win"
             else:
                 amount = -2
@@ -1251,7 +1251,7 @@ if (
                 amount = 1
                 outcome_type = "safe"
             elif st.session_state.last_outcome == "win":
-                amount = 2
+                amount = 4
                 outcome_type = "win"
             else:
                 amount = -2
@@ -1329,7 +1329,7 @@ if (
             if st.session_state.last_outcome == "safe":
                 st.info("Outcome: +1")
             elif st.session_state.last_outcome == "win":
-                st.success("Outcome: +2")
+                st.success("Outcome: +4")
             elif st.session_state.last_outcome == "loss":
                 st.error("Outcome: -2")
 
