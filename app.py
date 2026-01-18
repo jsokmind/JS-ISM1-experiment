@@ -598,10 +598,10 @@ if not st.session_state.started:
     """
     <style>
     h1 {
-        font-family: "Georgia", "Times New Roman", serif;
-        color: #1f3a5f;
-        font-weight: 500;
-        letter-spacing: 0.5px;
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        color: #243b5a;
+        font-weight: 400;
+        letter-spacing: 0.6px;
     }
     </style>
     """,
