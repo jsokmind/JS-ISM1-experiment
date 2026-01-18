@@ -599,7 +599,7 @@ if not st.session_state.started:
     st.write(
         "Today, you will be playing the latest and greatest online betting game.\n\n"
         "Your objective is to maximize your earnings. There will be blocks of rounds, each separated by a brief break.\n\n"
-        "Each round is an individual decision between a safe-option (+1) and a risk-bet (+$4 if win, -$2 if loss) whose outcomes are determined by a computerized random process. \n\n"
+        "Each round is an individual decision between a safe-option (+1) and a risk-bet (+4 if win, -2 if loss) whose outcomes are determined by a computerized random process. \n\n"
         "Thus, you may notice streaks."
     )
     st.write(f"Starting balance: {st.session_state.balance}")
