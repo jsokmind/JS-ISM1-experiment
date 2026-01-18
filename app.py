@@ -44,6 +44,53 @@ def log_trial():
             st.session_state.failed_rows = []
         st.session_state.failed_rows.append(row_data)
 
+# Message pools for variety in feedback
+VISUAL_MESSAGES = {
+    "safe": [
+        "You chose the safe option. +1 added.",
+        "Safe choice selected. +1 to your balance.",
+        "You played it safe. +1 earned."
+    ],
+    "win": [
+        "You chose the risky option and won. +2 added.",
+        "Your risky bet paid off. +2 to your balance.",
+        "You took the risk and won. +2 earned."
+    ],
+    "loss": [
+        "You chose the risky option and lost. -2 deducted.",
+        "Risky bet didn't pay off. -2 from your balance.",
+        "You took the risk and lost. -2 deducted."
+    ]
+}
+
+AFFECTIVE_MESSAGES = {
+    "safe": [
+        "😌 You chose stability. A calm +1.",
+        "🛡️ Playing it safe. Steady +1 added.",
+        "✓ Safe and sound. +1 to your balance."
+    ],
+    "win_neutral": [  # For streaks 0-2
+        "🎉 Nice hit! +2 added.",
+        "✨ You won the risky bet! +2 earned.",
+        "💵 Risky choice paid off! +2 to your balance."
+    ],
+    "win_hot": [  # For streaks 3+
+        "🚀 Another win! The streak keeps rolling!",
+        "🔥 You're unstoppable! +2 added to the fire!",
+        "⚡ The momentum continues! +2 and counting!"
+    ],
+    "loss_neutral": [  # For streaks 0-2
+        "😬 Tough loss. -2 deducted.",
+        "💸 Didn't work out this time. -2 from your balance.",
+        "😕 The risk didn't pay off. -2 deducted."
+    ],
+    "loss_cold": [  # For streaks 3+
+        "😖 Ouch, another loss. The slide continues.",
+        "💔 The streak persists. -2 deducted.",
+        "😣 Tough break again. -2 from your balance."
+    ]
+}
+
 
 # ===== INITIALIZE ALL SESSION STATE VARIABLES =====
 if "participant_id" not in st.session_state:
@@ -898,17 +945,20 @@ if (
 
     if st.session_state.awaiting_feedback:
         st.divider()
-
+    
         feedback_col, button_col = st.columns([2, 1])
-
+    
         with feedback_col:
             if st.session_state.last_outcome == "safe":
-                st.info("You chose the safe option. +1 added.")
+                message = random.choice(VISUAL_MESSAGES["safe"])
+                st.info(message)
             elif st.session_state.last_outcome == "win":
-                st.success("You chose the risky option and won. +2 added.")
+                message = random.choice(VISUAL_MESSAGES["win"])
+                st.success(message)
             elif st.session_state.last_outcome == "loss":
-                st.error("You chose the risky option and lost. -2 deducted.")
-
+                message = random.choice(VISUAL_MESSAGES["loss"])
+                st.error(message)
+    
         with button_col:
             st.write("")
             st.button("Continue →", on_click=continue_after_feedback, use_container_width=True)
@@ -1145,26 +1195,28 @@ if (
     # awaiting feedback from the player
     if st.session_state.awaiting_feedback:
         st.divider()
-
-        # Put feedback message and button side-by-side
+    
         feedback_col, button_col = st.columns([2, 1])
-
+    
         with feedback_col:
             if st.session_state.last_outcome == "safe":
-                st.info("😌 You chose stability. A calm +1.")
+                message = random.choice(AFFECTIVE_MESSAGES["safe"])
+                st.info(message)
             elif st.session_state.last_outcome == "win":
                 if ctx["tone"] == "hot":
-                    st.success("🚀 Another win! The streak keeps rolling.")
+                    message = random.choice(AFFECTIVE_MESSAGES["win_hot"])
                 else:
-                    st.success("🎉 Nice hit! +2 added.")
+                    message = random.choice(AFFECTIVE_MESSAGES["win_neutral"])
+                st.success(message)
             elif st.session_state.last_outcome == "loss":
                 if ctx["tone"] == "cold":
-                    st.error("😖 Ouch, another loss. The slide continues.")
+                    message = random.choice(AFFECTIVE_MESSAGES["loss_cold"])
                 else:
-                    st.error("😬 Tough loss. -2 deducted.")
-
+                    message = random.choice(AFFECTIVE_MESSAGES["loss_neutral"])
+                st.error(message)
+    
         with button_col:
-            st.write("")  # Add spacing to align button vertically
+            st.write("")
             st.button("Continue →", on_click=continue_after_feedback, use_container_width=True)
 
 # --- DE-SALIENCE BLOCK ---
