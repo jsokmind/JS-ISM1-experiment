@@ -718,21 +718,20 @@ if (
     and st.session_state.block > 4
 ):
     st.header("🎉 Experiment Complete!")
-    st.write("Thank you so much for participating in this behavioral economics study!")
-
-    st.divider()
-
-    col1, col2 = st.columns(2)
-    with col1:
-        st.metric("Final Balance", f"${st.session_state.balance}")
-    with col2:
-        st.metric("Blocks Completed", 4)
-
-    st.divider()
-
     st.success("✅ Your responses have been recorded successfully.")
-    st.write("Your participation helps advance our understanding of decision-making under uncertainty.")
-    st.write("You may now close this window.")
+    st.write("Thank you so much for participating in this behavioral economics study.")
+
+    st.divider()
+
+    st.link_button(
+    "**To be eligible for the gift card draw, please fill out this form. It will take less than 3 minutes**",
+    "https://forms.gle/sbfs6J8UXEm61aRYA"
+    )
+
+    st.divider()
+
+
+
 
 
 
