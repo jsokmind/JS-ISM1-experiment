@@ -644,7 +644,6 @@ if st.session_state.started and st.session_state.in_break:
     **Each block is independent. Your balance has been reset to $20.**
     - Do not rely on strategies from the previous block
     - Pay close attention to how information is presented in this next block
-    - Make decisions based on what you observe here
     
     **Make decisions based only on what you observe in this next block.**
 
