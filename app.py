@@ -634,7 +634,7 @@ if st.session_state.started and st.session_state.in_break:
     
     st.header("Break Time!")
     st.write("Please take a short break before continuing to the next block.")
-    st.write("The next block will begin automatically when the timer reaches zero.")
+    st.write("The next block will begin when the timer reaches zero.")
     
     st.divider()
 
