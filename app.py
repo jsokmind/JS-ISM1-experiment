@@ -581,7 +581,22 @@ if st.session_state.started and st.session_state.in_break:
     st.write("The next block will begin automatically when the timer reaches zero.")
     
     st.divider()
+
+    st.warning("""
+    ⚠️ **New Block Starting**
     
+    **You will notice that many things will change so...**
+    - Do not rely on strategies from the previous block
+    - Pay close attention to how information is presented in this block
+    - Make decisions based on what you observe here
+    
+    **Your task:** Make the best choices you can based on the information presented in THIS block.
+
+    Previous blocks do not predict what will happen in this one.
+    """)
+    
+    st.divider()
+
     # Mindless task: Moving countdown
     if remaining > 0:
         # Generate pseudo-random but stable position based on remaining time
