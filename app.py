@@ -415,6 +415,83 @@ div.stButton > button:disabled {
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<style>
+
+/* ===========================
+   MOBILE / SMALL SCREEN MODE
+   =========================== */
+@media (max-width: 768px) {
+
+  /* Reduce global container padding */
+  .block-container {
+    padding-top: 1.5rem;
+    max-width: 100%;
+  }
+
+  /* Metrics: smaller text */
+  [data-testid="stMetricValue"] {
+    font-size: 20px;
+  }
+
+  [data-testid="stMetricLabel"] {
+    font-size: 12px;
+  }
+
+  /* Buttons: MUCH smaller height */
+  div.stButton > button {
+    height: 80px;
+    font-size: 16px;
+    border-radius: 12px;
+  }
+
+  /* Reduce headers */
+  h1 { font-size: 26px; }
+  h2 { font-size: 22px; }
+  h3 { font-size: 18px; }
+
+  /* Reduce subheaders */
+  .stSubheader {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  /* Stack columns vertically */
+  [data-testid="column"] {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+  }
+
+  /* Reduce banner padding */
+  .info-banner {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  /* Tone down animations (important on mobile) */
+  .pulse,
+  .bounce,
+  .glow-pulse {
+    animation-duration: 1.5s;
+  }
+
+  /* Balance change animations smaller */
+  .balance-change-visual,
+  .balance-change-affective-win,
+  .balance-change-affective-loss {
+    font-size: 22px;
+  }
+
+  /* Streak cards tighter */
+  .streak-display {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+}
+</style>
+""", unsafe_allow_html=True)
+
 
 
 def continue_after_feedback():
