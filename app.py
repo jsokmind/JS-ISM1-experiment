@@ -396,7 +396,7 @@ def continue_after_feedback():
     st.session_state.round_start_time = datetime.now(timezone.utc)
 
     # Enter break exactly once at round limit
-    if st.session_state.round >= 15:
+    if st.session_state.round >= 30:
         st.session_state.in_break = True
 
 
@@ -603,7 +603,7 @@ if (
     with col1:
         st.metric("Block", st.session_state.block)
     with col2:
-        st.metric("Round", f"{st.session_state.round + 1}/15")
+        st.metric("Round", f"{st.session_state.round + 1}/30")
     with col3:
         if (st.session_state.awaiting_feedback and st.session_state.last_outcome and "animation_shown" not in st.session_state):
             # Determine amount changed
@@ -709,7 +709,7 @@ if (
     with col1:
         st.metric("Block", st.session_state.block)
     with col2:
-        st.metric("Round", f"{st.session_state.round + 1}/15")
+        st.metric("Round", f"{st.session_state.round + 1}/30")
     with col3:
         if (st.session_state.awaiting_feedback and st.session_state.last_outcome and "animation_shown" not in st.session_state):
             # Determine amount changed
@@ -829,7 +829,7 @@ if (
     with col1:
         st.metric("Block", st.session_state.block)
     with col2:
-        st.metric("Round", f"{st.session_state.round + 1}/15")
+        st.metric("Round", f"{st.session_state.round + 1}/30")
     with col3:
         if (st.session_state.awaiting_feedback and 
         st.session_state.last_outcome and 
@@ -1081,7 +1081,7 @@ if (
     with col1:
         st.metric("Block", st.session_state.block)
     with col2:
-        st.metric("Round", f"{st.session_state.round + 1}/15")
+        st.metric("Round", f"{st.session_state.round + 1}/30")
     with col3:
         if (st.session_state.awaiting_feedback and
             st.session_state.last_outcome and
