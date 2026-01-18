@@ -549,6 +549,9 @@ if st.session_state.started and st.session_state.in_break:
         st.session_state.round = 0
         st.session_state.in_break = False
 
+        # RESET BALANCE TO DEFAULT AMT TO ADDRESS WEALTH EFFECTS
+        st.session_state.balance = 20
+        
         # HARD RESET OF BIAS
         st.session_state.bias_rounds_left = 0
         st.session_state.bias_rounds_active = False
