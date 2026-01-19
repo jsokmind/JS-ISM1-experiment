@@ -576,7 +576,7 @@ def emotional_context(win_streak, loss_streak):
 def show_balance_change_animation(amount, condition, outcome_type):
     """
     Display animated balance change based on condition
-    amount: +1, +2, or -2
+    amount: +1, +4, or -2
     condition: "neutral", "visual", "affective", "de-salience"
     outcome_type: "safe", "win", "loss"
     """
@@ -918,7 +918,7 @@ if (
             if st.session_state.last_outcome == "safe":
                 st.info("You chose the safe option. +1 added.")
             elif st.session_state.last_outcome == "win":
-                st.success("You chose the risky option and won. +2 added.")
+                st.success("You chose the risky option and won. +4 added.")
             elif st.session_state.last_outcome == "loss":
                 st.error("You chose the risky option and lost. -2 deducted.")
 
