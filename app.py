@@ -686,6 +686,8 @@ if not st.session_state.started:
 
     "To be eligible for the free but random **$50 participation prize**, you must **complete all rounds of the game** "
     "and **submit the short form** that will appear at the end of the experiment.\n\n"
+    "Lastly, please make sure that you are in a **distraction-free, quiet environment. Ensure that you can provide this experiment your full, undivided attention.** \n\n"
+    
     "Good luck!" 
     )
     st.write(f"Starting balance: {st.session_state.balance}")
