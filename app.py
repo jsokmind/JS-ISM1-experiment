@@ -675,7 +675,7 @@ if not st.session_state.started:
     st.header("Welcome")
     st.write(
     "In this game, you will be making a series of decisions in a simulated betting environment. "
-    "Your goal is to maximize your earnings over the course of the game.\n\n"
+    "Your goal is to maximize your earnings over each of the 4 'blocks'.\n\n"
 
     "In each round, you will choose between:\n"
     "- A **safe bet** that guarantees +1 \n"
