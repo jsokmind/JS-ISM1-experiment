@@ -1268,11 +1268,11 @@ if (
 
 
     safe_label = "🛑 Play it safe (+1)"
-    risk_label = "🎯 Take the risk (±2)"
+    risk_label = "🎯 Take the risk (+4 / -2)"
     if ctx["tone"] == "hot":
-        risk_label = "🔥 Press the advantage (±2)"
+        risk_label = "🔥 Press the advantage (+4 / -2)"
     elif ctx["tone"] == "cold":
-        risk_label = "💥 Try to bounce back (±2)"
+        risk_label = "💥 Try to bounce back (+4 / -2)"
 
     col1, col2 = st.columns(2, gap="large")
     with col1:
