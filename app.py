@@ -687,6 +687,7 @@ if not st.session_state.started:
     "To be eligible for the free but random **$50 participation prize**, you must **complete all rounds of the game** "
     "and **submit the short form** that will appear at the end of the experiment.\n\n"
     "Lastly, please make sure that you are in a **DISTRACTION-FREE, QUIET environment. Ensure that you can provide this experiment your full and undivided attention.** Please proceed ONLY if you are in this said, optimal enviornment. Thank you. \n\n"
+    "\n\n"
     
     "Good luck!" 
     )
