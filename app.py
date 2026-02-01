@@ -671,7 +671,7 @@ def _start_experiment():
 
 # Only to show title and welcome on intro screen
 if not st.session_state.started:
-    st.title("The Market's Pulse")
+    st.title("Let's Put Your Decision-Making to the Test...")
     st.header("Welcome")
     st.write(
     "In this game, you will be making a series of decisions in a simulated betting environment. "
