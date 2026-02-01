@@ -690,7 +690,6 @@ if not st.session_state.started:
     
     "Good luck!" 
     )
-    "    "
     st.write(f"Starting balance: {st.session_state.balance}")
     st.button("Start Experiment", on_click=_start_experiment)
     
