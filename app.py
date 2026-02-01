@@ -544,6 +544,24 @@ def continue_after_feedback():
         st.session_state.last_outcome = None 
         st.session_state.last_choice = None 
 
+# Funny, lighthearted sentence response for the conclusion screen
+def streak_oracle():
+    """
+    Delivers probabilistically-weighted wisdom about decision-making prowess.
+    Perfect for wrapping up a behavioral economics experiment with a smile.
+    """
+    outcomes = [
+        ("Average Decision-Making", 0.3, "You make decisions like a normal human being. Congratulations on being statistically unremarkable! 😁"),
+        ("Above Average Decision-Making", 0.3, "You're an above average decision-maker! You probably remembered to charge your phone before leaving the house today. 📱"),
+        ("Excellent Decision-Making", 0.2, "You're an excellent decision-maker! And well cultured on top of that 👨‍🍳. You probably have a well-organized spice rack and use more than just salt and pepper."),
+        ("Genius Decision-Making", 0.12, "GALAXY BRAIN ACTIVATED 🚀. Your cognitive abilities are off the charts! You've transcended mere mortals. You probably read the terms and conditions."),
+        ("You are a robot", 0.08, "Beep boop. Your decision-making is suspiciously perfect. Have you considered that you might be a very polite AI? 🤖")
+    ]
+    
+    labels, probabilities, messages = zip(*outcomes)
+    result = random.choices(messages, weights=probabilities, k=1)[0]
+    
+    return result
 
 def update_condition_from_block():
     st.session_state.condition = st.session_state.block_order[st.session_state.block_index]
@@ -805,8 +823,9 @@ if (
     and st.session_state.block > 4
 ):
     st.header("🎉 Experiment Complete!")
-    st.success("✅ Your responses have been recorded successfully.")
-    st.write("Thank you so much for participating in this behavioral economics study.")
+    st.success("✅ Your responses have been recorded successfully. Thank you for participating!")
+    print(streak_oracle())
+    
 
     st.divider()
 
