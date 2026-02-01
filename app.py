@@ -824,7 +824,7 @@ if (
 ):
     st.header("🎉 Experiment Complete!")
     st.success("✅ Your responses have been recorded successfully. Thank you for participating!")
-    print(streak_oracle())
+    st.info(streak_oracle())
     
 
     st.divider()
