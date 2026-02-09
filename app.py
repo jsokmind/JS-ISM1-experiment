@@ -702,9 +702,12 @@ if not st.session_state.started:
     "Outcomes of the risky option are determined by a computerized random process. "
     "As the game progresses, you may observe patterns or streaks in outcomes.\n\n"
 
-    "To be eligible for the free but random **$50 participation prize**, you must **complete all rounds of the game** "
+    st.divider()
+
+        
+    st.info("To be eligible for the free but random **$50 participation prize**, you must **complete all rounds of the game** "
     "and **submit the short form** that will appear at the end of the experiment.\n\n"
-    "Lastly, please make sure that you are in a **DISTRACTION-FREE, QUIET environment. Ensure that you can provide this experiment your full and undivided attention.** Please proceed ONLY if you are in this said, optimal environment. Thank you. \n\n"
+    "Lastly, please make sure that you are in a **DISTRACTION-FREE, QUIET environment. Ensure that you can provide this experiment your full and undivided attention.** Please proceed ONLY if you are in this said, optimal environment. Thank you. \n\n")
     
     "Good luck!" 
     )
