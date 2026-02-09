@@ -705,13 +705,13 @@ if not st.session_state.started:
     st.divider()
 
         
-    st.warning("To be eligible for the free but random **$50 participation prize**, you must **complete all rounds of the game** "
+    st.error("To be eligible for the free but random **$50 participation prize**, you must **complete all rounds of the game** "
     "and **submit the short form** that will appear at the end of the experiment.\n\n"
     "Lastly, please make sure that you are in a **DISTRACTION-FREE, QUIET environment. Ensure that you can provide this experiment your full and undivided attention.** Please proceed ONLY if you are in this said, optimal environment. Thank you. \n\n")
     
     st.write("Good luck!")
     
-    st.info(f"Starting balance: {st.session_state.balance}")
+    st.write(f"Starting balance: *{st.session_state.balance}*")
     st.button("Start Experiment", on_click=_start_experiment)
     
 # Initialize break timer if not exists
